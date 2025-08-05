@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import br.com.hangman.exception.GameIsFinishedException;
-import br.com.hangman.exception.LetterAlreadyInouttedException;
+import br.com.hangman.exception.LetterAlreadyInputtedException;
 
 import static br.com.hangman.model.HangmanGameStatus.LOSE;
 import static br.com.hangman.model.HangmanGameStatus.PENDING;
@@ -35,21 +35,25 @@ public class HangmanGame {
         this.hangmanInitialSize = hangman.length();
     }
 
+    public HangmanGameStatus getHangmanGameStatus() {
+        return hangmanGameStatus;
+    }
+
     public void inputCharacter(final char character) {
         if (this.hangmanGameStatus != PENDING) {
             var message = this.hangmanGameStatus == WIN ? "Parabéns você ganhou!" : "Você perdeu, tente novamente";
 
             throw new GameIsFinishedException(message);
         }
-        
+
         var found = this.characters.stream()
                 .filter(c -> c.getCharacter() == character)
                 .toList();
 
         if (this.failAttempts.contains(character)) {
-            throw new LetterAlreadyInouttedException("A letra '" + character + "' já foi informada anteriormente");
+            throw new LetterAlreadyInputtedException("A letra '" + character + "' já foi informada anteriormente");
         }
-        
+
         if (found.isEmpty()) {
             failAttempts.add(character);
             if (failAttempts.size() >= 6) {
@@ -60,7 +64,7 @@ public class HangmanGame {
         }
 
         if (found.getFirst().isVisible()) {
-            throw new LetterAlreadyInouttedException("A letra '" + character + "' já foi informada anteriormente");
+            throw new LetterAlreadyInputtedException("A letra '" + character + "' já foi informada anteriormente");
         }
 
         this.characters.forEach(c -> {
@@ -100,24 +104,22 @@ public class HangmanGame {
                         new HangmanChar('/', this.lineSize * LEGS_LINE + 5),
                         new HangmanChar('\\', this.lineSize * LEGS_LINE + 7)));
     }
-    
+
     private void rebuildHangman(final HangmanChar... hangmanChars) {
         var hangmanBuilder = new StringBuilder(this.hangman);
         Stream.of(hangmanChars).forEach(
-                h -> hangmanBuilder.setCharAt(h.getPosition(), h.getCharacter()
-                ));
-            
+                h -> hangmanBuilder.setCharAt(h.getPosition(), h.getCharacter()));
+
         var failMessage = this.failAttempts.isEmpty() ? "" : "Tentativas" + this.failAttempts;
         this.hangman = hangmanBuilder.substring(0, hangmanInitialSize) + failMessage;
     }
 
     private List<HangmanChar> setCharacterSpacesPositionInGame(final List<HangmanChar> characters,
-            final int whiteSpaceAmount) {
+            final int whiteSpacesAmount) {
         final var LINE_LETTER = 6;
         for (int i = 0; i < characters.size(); i++) {
             characters.get(i).setPosition(this.lineSize * LINE_LETTER + HANGMAN_INITIAL_LINE_LENGTH + i);
         }
-
         return characters;
     }
 
