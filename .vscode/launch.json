@@ -17,7 +17,7 @@
             "request": "launch",
             "mainClass": "br.com.hangman.App",
             "projectName": "app",
-            "args": "teste"
+            "args": ["t", "e", "s", "t", "e"]
         }
     ]
 }
