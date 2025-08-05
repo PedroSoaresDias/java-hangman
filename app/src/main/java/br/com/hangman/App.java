@@ -1,5 +1,6 @@
 package br.com.hangman;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -13,12 +14,12 @@ public class App {
     private final static Scanner scanner = new Scanner(System.in);
 
     public static void main(String... args) {
-        var characters = Stream.of(args)
+        List<HangmanChar> characters = Stream.of(args)
                 .map(a -> a.toLowerCase().charAt(0))
                 .map(HangmanChar::new).toList();
 
         System.out.println(characters);
-        var hangmanGame = new HangmanGame(characters);
+        HangmanGame hangmanGame = new HangmanGame(characters);
         System.out.println("Bem-vindo ao jogo da forca, tenta adivinhar a palavra, boa sorte");
         System.out.println(hangmanGame);
 
@@ -43,7 +44,7 @@ public class App {
 
     private static void inputCharacter(final HangmanGame hangmanGame) {
         System.out.println("Informe uma letra");
-        var character = scanner.next().charAt(0);
+        char character = scanner.next().charAt(0);
         try {
             hangmanGame.inputCharacter(character);
         } catch (LetterAlreadyInputtedException e) {
