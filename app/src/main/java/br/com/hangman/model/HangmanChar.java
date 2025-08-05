@@ -1,5 +1,7 @@
 package br.com.hangman.model;
 
+import java.util.Objects;
+
 public class HangmanChar {
     private final char character;
     private boolean isVisible;
@@ -24,7 +26,7 @@ public class HangmanChar {
         return isVisible;
     }
     
-    public boolean isInVisible() {
+    public boolean isInvisible() {
         return !isVisible;
     }
 
@@ -42,35 +44,25 @@ public class HangmanChar {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + character;
-        result = prime * result + (isVisible ? 1231 : 1237);
-        result = prime * result + position;
-        return result;
+        return Objects.hash(character, isVisible, position);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+        if (!(obj instanceof HangmanChar that))
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        HangmanChar other = (HangmanChar) obj;
-        if (character != other.character)
-            return false;
-        if (isVisible != other.isVisible)
-            return false;
-        if (position != other.position)
-            return false;
-        return true;
+        return character == that.character &&
+                isVisible == that.isVisible &&
+                position == that.position;
     }
 
     @Override
     public String toString() {
-        return "HangmanChar [character=" + character + ", isVisible=" + isVisible + ", position=" + position + "]";
+        return "HangmanChar{" +
+                "character=" + character +
+                ", isVisible=" + isVisible +
+                ", position=" + position +
+                '}';
     }
 
     
